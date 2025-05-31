@@ -1,28 +1,29 @@
-`````
-# Customer Labs Node 🔁
+---
 
-An Express.js web application that receives JSON data for an account and forwards it to multiple configured destinations using webhooks. Uses SQLite (via Sequelize) for data storage.
+# 🔁 Customer Labs Node
+
+An Express.js web app that receives JSON data per account and forwards it to multiple configured destinations using webhooks. Data is stored in a lightweight SQLite database using Sequelize ORM.
 
 ---
 
 ## 🚀 Features
 
-- ✅ Account Management (CRUD)
-- ✅ Destination Management (CRUD)
-- ✅ Webhook-based Data Forwarding
-- ✅ Auth via App Secret Token
-- ✅ Supports GET, POST, PUT forwarding
-- ✅ SQLite (lightweight and portable)
+* ✅ Account & Destination CRUD APIs
+* ✅ Webhook-based Data Forwarding
+* ✅ Auth via App Secret (`CL-X-TOKEN`)
+* ✅ Supports forwarding with `GET`, `POST`, and `PUT`
+* ✅ Lightweight SQLite database
+* ✅ Built with Node.js + Express
 
 ---
 
 ## 🏗️ Tech Stack
 
-- **Node.js**
-- **Express**
-- **Sequelize ORM**
-- **SQLite**
-- **Axios** (for outbound HTTP)
+* **Node.js**
+* **Express**
+* **Sequelize ORM**
+* **SQLite**
+* **Axios** (for outbound HTTP requests)
 
 ---
 
@@ -33,67 +34,89 @@ git clone https://github.com/mohankumar-v-s/customerlabs-node.git
 cd customerlabs-node
 npm install
 npm run dev
-````
+```
 
-The app runs on `http://localhost:8000`
+The app will start at: [http://localhost:8000](http://localhost:8000)
 
 ---
 
-## 🧩 API Overview
+## 🧩 API Reference
 
-### Account
+### 🔐 Authentication
+
+All data forwarding (`/server/incoming_data`) requires a valid `CL-X-TOKEN` header:
+
+```http
+CL-X-TOKEN: your_app_secret_token
+```
+
+---
+
+### 📁 Accounts
 
 | Method | Endpoint        | Description                   |
 | ------ | --------------- | ----------------------------- |
-| POST   | `/accounts`     | Create account                |
-| GET    | `/accounts`     | List all accounts             |
-| GET    | `/accounts/:id` | Get one account               |
-| PUT    | `/accounts/:id` | Update account                |
+| POST   | `/accounts`     | Create a new account          |
+| GET    | `/accounts`     | Get all accounts              |
+| GET    | `/accounts/:id` | Get a specific account        |
+| PUT    | `/accounts/:id` | Update an account             |
 | DELETE | `/accounts/:id` | Delete account + destinations |
 
-### Destination
+---
 
-| Method | Endpoint                           | Description              |
-| ------ | ---------------------------------- | ------------------------ |
-| POST   | `/destinations`                    | Create destination       |
-| GET    | `/destinations`                    | List all destinations    |
-| GET    | `/destinations/:id`                | Get one destination      |
-| PUT    | `/destinations/:id`                | Update destination       |
-| DELETE | `/destinations/:id`                | Delete destination       |
-| GET    | `/destinations/account/:accountId` | Destinations for account |
+### 🎯 Destinations
 
-### Data Handler
-
-| Method | Endpoint                | Description                       |
-| ------ | ----------------------- | --------------------------------- |
-| POST   | `/server/incoming_data` | Receive and push JSON to webhooks |
-
-> Requires `CL-X-TOKEN` in headers and JSON data in body.
+| Method | Endpoint                           | Description                    |
+| ------ | ---------------------------------- | ------------------------------ |
+| POST   | `/destinations`                    | Create a new destination       |
+| GET    | `/destinations`                    | Get all destinations           |
+| GET    | `/destinations/:id`                | Get a specific destination     |
+| PUT    | `/destinations/:id`                | Update a destination           |
+| DELETE | `/destinations/:id`                | Delete a destination           |
+| GET    | `/destinations/account/:accountId` | Get destinations by account ID |
 
 ---
 
-## 🧪 Sample API Calls
+### 🔁 Data Forwarding
 
-## 📬 Postman Collection
+| Method | Endpoint                | Description                          |
+| ------ | ----------------------- | ------------------------------------ |
+| POST   | `/server/incoming_data` | Receive JSON and forward to webhooks |
 
-You can use the provided Postman collection to test all APIs quickly.
-
-### 🔗 [Download Collection](./postman/customerlabs-node.postman_collection.json)
+> ✅ Requires `CL-X-TOKEN` in headers
+> ✅ Expects valid JSON body
 
 ---
 
-## 🗃️ SQLite DB
+## 🧪 Sample Usage
 
-* Default DB file: `data.db`
-* Auto-created by Sequelize.
+Test the APIs quickly using Postman.
+
+📬 **Download the Postman Collection:**
+[📁 `customerlabs-node.postman_collection.json`](./postman/customerlabs-node.postman_collection.json)
+
+---
+
+## 🗃️ Database
+
+* SQLite database file: `data.db`
+* Auto-created and managed by Sequelize.
 
 ---
 
 ## 🔐 Security Notes
 
-* App secret token is sent via HTTP headers using: `CL-X-TOKEN`
-* Invalid tokens return `"Un Authenticate"`.
+* All data submissions must be authenticated via the `CL-X-TOKEN` header.
+* Invalid tokens will return:
 
-----
+```json
+{ "message": "Un Authenticate" }
+```
 
-````
+---
+
+## 📄 License
+
+MIT License – Feel free to use and modify.
+
+---
